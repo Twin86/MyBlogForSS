@@ -1,0 +1,284 @@
+#usatwiam safe mode dla update
+SET SQL_SAFE_UPDATES = 0;
+
+ALTER TABLE komentarze ADD CONSTRAINT fk_kom_to_wpis_id FOREIGN KEY (id_wpis) REFERENCES wpisy(id_wpis);
+ALTER TABLE wpisy ADD CONSTRAINT fk_kat_id FOREIGN KEY (kat_id) REFERENCES kategorie(id_kategori);
+insert into users values (default,"Sebastian","Tarka","1234","","twin86@gmail.com","Twin86");
+insert into wpisy values (default,"To nie był spalony","","to_nie_byl_karny.php",CURDATE(),CURTIME(),1,"",1);
+
+UPDATE wpisy 
+SET 
+    img_url = 'img/wpisy_img/the-ball-488701_1920.jpg'
+WHERE
+    id_wpis = 1;
+UPDATE wpisy 
+SET 
+    wpis = 'Lorem ipsum dolor sit amet dignissim dolor eget est. Vivamus orci molestie a, bibendum varius nec, sagittis eleifend. Nulla in tortor augue, congue id, urna. Cras ut metus. Curabitur condimentum nulla. Nullam consequat ligula nunc, rhoncus et, tincidunt nec, sem. Quisque consectetuer congue ac, felis. Mauris id augue. Sed condimentum ante ipsum dolor sit amet, consectetuer ac, laoreet ante ullamcorper pede ultrices mi. Cras vitae velit tempus urna eu mauris. Pellentesque fringilla neque scelerisque eu, tortor. Cras lacus lorem, at sapien sodales lectus urna luctus orci, placerat quam. Nunc leo. In hac habitasse platea dictumst. Praesent feugiat. Proin non tincidunt augue quis ante. Vestibulum tincidunt. Praesent scelerisque sem. Quisque eu justo. Vestibulum cursus tristique, augue eu odio eget.'
+WHERE
+    id_wpis = 1;
+ALTER TABLE kategorie add on_off int(1) not null;
+ALTER TABLE wpisy add on_off int(1) not null;
+UPDATE wpisy 
+SET 
+    kat_id = 1
+WHERE
+    id_wpis = 1;
+UPDATE kategorie 
+SET 
+    on_off = 1
+WHERE
+    id_kategori = 1;
+UPDATE wpisy 
+SET 
+    on_off = 1
+WHERE
+    id_wpis = 1;
+insert into kategorie values (default,"news","Wszystko to co ostatnio w sporcie się wydażyło.");
+
+insert into wpisy values (default,"Czy Benefica sprawi niespodziankę","","czy_benefica_sprawi_niespodzianke.php",CURDATE(),CURTIME(),1,"fc-barcelona-1314076_1280.jpg",1,1,1);
+UPDATE wpisy 
+SET 
+    wpis = 'Lorem ipsum dolor sit amet dignissim dolor eget est. Vivamus orci molestie a, bibendum varius nec, sagittis eleifend. Nulla in tortor augue, congue id, urna. Cras ut metus. Curabitur condimentum nulla. Nullam consequat ligula nunc, rhoncus et, tincidunt nec, sem. Quisque consectetuer congue ac, felis. Mauris id augue. Sed condimentum ante ipsum dolor sit amet, consectetuer ac, laoreet ante ullamcorper pede ultrices mi. Cras vitae velit tempus urna eu mauris. Pellentesque fringilla neque scelerisque eu, tortor. Cras lacus lorem, at sapien sodales lectus urna luctus orci, placerat quam. Nunc leo. In hac habitasse platea dictumst. Praesent feugiat. Proin non tincidunt augue quis ante. Vestibulum tincidunt. Praesent scelerisque sem. Quisque eu justo. Vestibulum cursus tristique, augue eu odio eget.'
+WHERE
+    id_wpis = 4;
+
+
+SELECT 
+    data_wpis, czas_wpis, title, wpis, url_wpis, img_url
+FROM
+    wpisy
+WHERE
+    on_off = 1
+ORDER BY data_wpis DESC , czas_wpis DESC;
+
+SELECT 
+    title, url_wpis
+FROM
+    wpisy
+WHERE
+    on_off = 1
+ORDER BY data_wpis DESC , czas_wpis DESC
+LIMIT 5;
+
+ALTER TABLE kategorie  DEFAULT CHARACTER SET utf8 DEFAULT COLLATE = 'utf8_unicode_ci';
+SELECT 
+    data_wpis, czas_wpis, title, wpis, url_wpis, img_url
+FROM
+    wpisy
+WHERE
+    id_wpis = 3 AND on_off = 1;
+
+SELECT 
+    id_wpis, autor_wpis_id, users.nick
+FROM
+    wpisy
+        LEFT JOIN
+    users ON wpisy.autor_wpis_id = users.id_user
+WHERE
+    wpisy.id_wpis = 1;
+
+SELECT 
+    id_wpis, autor_wpis_id, users.nick, kategorie.title
+FROM
+    wpisy
+        LEFT JOIN
+    users ON wpisy.autor_wpis_id = users.id_user
+        RIGHT JOIN
+    kategorie ON wpisy.kat_id = kategorie.id_kategori
+WHERE
+    wpisy.id_wpis = 1;
+
+SELECT 
+    wpisy.id_wpis, COUNT(komentarze.id_wpis)
+FROM
+    komentarze
+        LEFT JOIN
+    wpisy ON komentarze.id_wpis = wpisy.id_wpis
+GROUP BY wpisy.id_wpis;
+
+SELECT 
+    users.nick, data_kom, czas_kom, komentarz, wpisy.id_wpis
+FROM
+    komentarze
+        LEFT JOIN
+    wpisy ON komentarze.id_wpis = wpisy.id_wpis
+        LEFT JOIN
+    users ON komentarze.id_user = users.id_user
+WHERE
+    komentarze.id_wpis = 1;
+CREATE VIEW sub_kategorie AS
+    SELECT 
+        *
+    FROM
+        kategorie;
+
+
+SELECT 
+    kategorie.id_kategori AS 'rodzic',
+    sub_kategorie.id_kategori AS 'id_dziecka',
+    sub_kategorie.title AS 'tytul_dziecka',
+    sub_kategorie.opis AS 'opis_dziecka'
+FROM
+    kategorie
+        JOIN
+    sub_kategorie ON kategorie.id_kategori = sub_kategorie.parent
+WHERE
+    (kategorie.id_kategori = sub_kategorie.id_kategori)
+        OR (kategorie.id_kategori = sub_kategorie.parent)
+ORDER BY kategorie.id_kategori;
+
+SELECT 
+    kategorie.*
+FROM
+    kategorie
+        RIGHT JOIN
+    sub_kategorie ON kategorie.id_kategori = sub_kategorie.parent
+WHERE
+    kategorie.on_off = 1
+ORDER BY kategorie.parent;
+
+SELECT 
+    *
+FROM
+    kategorie
+WHERE
+    on_off = 1 AND parent = 0;
+SELECT 
+    *
+FROM
+    kategorie
+WHERE
+    on_off = 1 AND parent != 0
+ORDER BY parent;
+
+DELETE FROM users 
+WHERE
+    id_user = 2;/*fk_kom_to_wpis_id*/
+ALTER TABLE komentarze ADD CONSTRAINT fk_kom_to_wpis_id FOREIGN KEY (id_wpis) REFERENCES wpisy(id_wpis) ON DELETE CASCADE;
+ALTER TABLE komentarze DROP FOREIGN KEY `fk_kom_user_id`;
+
+/*
+	jezeli is_lock = 1 to zablokowany
+					= 0 to ma dostęp
+*/
+alter table users add column is_lock int(1) not null default 0;
+
+SELECT 
+    *
+FROM
+    users;
+
+
+ALTER TABLE users AUTO_INCREMENT=2;
+
+SELECT 
+    COUNT(*) AS 'istnieje'
+FROM
+    users
+WHERE
+    nick = 'Testowicz'
+        AND password = '12345678'
+        AND is_lock != 1;
+
+SELECT 
+    wpisy.id_wpis AS 'ID',
+    SUBSTRING(wpisy.title, 1, 60) AS 'Tytuł',
+    wpisy.data_wpis AS 'Data wpisu',
+    users.nick 'Autor',
+    kategorie.title AS 'Kategoria',
+    COUNT(komentarze.id_koment) AS 'komentowany'
+FROM
+    wpisy
+        LEFT JOIN
+    users ON wpisy.autor_wpis_id = users.id_user
+        LEFT JOIN
+    kategorie ON wpisy.kat_id = kategorie.id_kategori
+        LEFT JOIN
+    komentarze ON wpisy.id_wpis = komentarze.id_wpis
+GROUP BY wpisy.id_wpis;
+
+DELETE FROM wpisy 
+WHERE
+    id_wpis = 22;
+
+ALTER TABLE wpisy AUTO_INCREMENT=21;
+
+SELECT 
+    wpisy.id_wpis,
+    wpisy.title,
+    wpisy.wpis,
+    wpisy.url_wpis,
+    kategorie.id_kategori,
+    kategorie.title
+FROM
+    wpisy
+        LEFT JOIN
+    kategorie ON wpisy.kat_id = kategorie.id_kategori
+WHERE
+    wpisy.id_wpis = 1;
+
+SELECT 
+    nick, email, password, permissions
+FROM
+    users
+WHERE
+    email = 'twin86@gmail.com'
+        AND password = '1234'
+        AND permissions > 1;
+        
+#zapytanie dla wyswietlenia tablei kategori v1        
+SELECT 
+    kategorie.id_kategori AS 'ID',
+    kategorie.title AS 'Tytuł',
+    kategorie.on_off AS 'status',
+    kategorie.parent AS 'Rodzic',
+    (SELECT 
+            COUNT(wpisy.id_wpis)
+        FROM
+            wpisy
+                LEFT JOIN
+            kategorie ON wpisy.kat_id = kategorie.id_kategori
+        WHERE
+            wpisy.kat_id = kategorie.id_kategori) AS 'Liczba wpisów'
+FROM
+    kategorie
+GROUP BY kategorie.id_kategori;       
+
+SELECT 
+			kategorie.id_kategori as 'kat',
+            COUNT(wpisy.id_wpis)
+        FROM
+            wpisy
+                LEFT JOIN
+            kategorie ON wpisy.kat_id = kategorie.id_kategori
+        WHERE
+            wpisy.kat_id = kategorie.id_kategori group by wpisy.kat_id;
+
+
+#zapytanie dla wyswietlenia tablei kategori v2  to dziala   ale pomija kat bez wpisów     
+SELECT 
+    kategorie.id_kategori AS 'ID',
+    kategorie.title AS 'Tytuł',
+    kategorie.on_off AS 'status',
+    kategorie.parent AS 'Rodzic',
+    COUNT(wpisy.id_wpis) AS 'Liczba wpisów'
+FROM
+    kategorie
+        left JOIN
+    wpisy ON kategorie.id_kategori = wpisy.kat_id
+WHERE
+    kategorie.id_kategori = wpisy.kat_id
+GROUP BY kategorie.id_kategori;  
+
+#zapytanie dla wyswietlenia tablei kategori v3  to dziala       
+SELECT 
+    kategorie.id_kategori AS 'ID',
+    kategorie.title AS 'Tytuł',
+    kategorie.on_off AS 'status',
+    kategorie.parent AS 'Rodzic',
+    COUNT(wpisy.id_wpis) AS 'Liczba wpisów'
+FROM
+    kategorie
+        left JOIN
+    wpisy ON kategorie.id_kategori = wpisy.kat_id
+GROUP BY kategorie.id_kategori; 

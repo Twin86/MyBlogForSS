@@ -1,0 +1,247 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway&subset=latin,latin-ext);
+
+$color_black: #34302D;
+$color_green: #86C543;
+$color_purple_light: #EDEAE3;
+$color_gray: #E6E6E6;
+$color_white: #ffffff;
+
+$font-size: 0.95em;
+
+body, html {
+  height: 100%;
+  font-size: $font-size;
+}
+
+.container-fluid {
+  background: $color_purple_light;
+  height: 100%;
+  display: block;
+  div.row.top-area {
+    background: $color_black;
+    display: block;
+    color: $color_white;
+    position: relative;
+    box-shadow: 0px 0px 10px 0px rgb(52, 48, 45);
+    z-index: 100;
+
+  }
+
+  div.row.mid-area {
+    height: 93%;
+
+    .mid-left-area {
+      height: 100%;
+      background: $color_gray;
+      position: relative;
+      z-index: 50;
+    }
+    .mid-center-area {
+      position: relative;
+    }
+  }
+
+}
+
+//górny panel skróty, informacje itp
+.top-area, .mid-left-area, label, legend, .info-page {
+  font-family: 'Raleway', sans-serif;
+}
+
+.top-area {
+  transition: 0.5s;
+  h3, i {
+    opacity: 0.8;
+    cursor: pointer;
+  }
+  &:hover {
+    h3, i {
+      opacity: 1;
+      transition: 0.5s;
+    }
+  }
+
+  h3 {
+    margin: 10px 0px;
+    font-size: $font-size * 1.4;
+    display: block;
+  }
+  i {
+    display: inline-block;
+    text-align: center;
+    padding: 10px 15px;
+    font-size: $font-size * 1.35;
+    border-left: 1px solid rgba(230, 230, 230, 0.5);
+
+    &:hover {
+      color: $color_green;
+
+    }
+  }
+  a, a:hover {
+    color: inherit;
+    text-decoration: none;
+  }
+  .top-tools-area {
+    text-align: right;
+  }
+}
+
+//obszar nawigacyjny lewy główny
+.mid-left-area {
+  font-size: $font-size *0.9;
+  padding-left: 0px;
+  padding-right: 0px;
+  ul {
+    cursor: pointer;
+    transition: 0.5s;
+    & {
+      li {
+        position: relative;
+        z-index: 100;
+        ul > li {
+        }
+      }
+    }
+    li:hover {
+      //background: $color_green;
+      color: inherit;
+      border-bottom: 1px solid $color_purple_light;
+      //box-shadow: inset 0px 0px 10px rgba(0,0,0,1);
+      &, > ul, ul:hover {
+        transition: 0.5s;
+      }
+      > ul, li:hover > ul:hover {
+        position: absolute;
+        left: 100.5%;
+        top: 0;
+        width: 50%;
+        padding: 10px;
+        background: gray;
+        z-index: 50;
+
+      }
+    }
+    & > li > ul {
+
+      position: absolute;
+      top: 0;
+      left: -500px;
+      z-index: 50;
+      width: 100%;
+      list-style: none;
+      &,> li > a {
+        color: $color_white;
+        &:hover{
+          text-decoration: none;
+        }
+      }
+      li {
+        opacity: 0.8;
+      }
+      li:hover{
+        border-bottom: none;
+        opacity: 1;
+      }
+    }
+  }
+
+}
+
+//obszar edycji srodek
+.mid-center-area {
+  legend {
+    margin-left: 15px;
+    width: auto;
+  }
+  form {
+
+    .form-group {
+      margin: inherit;
+    }
+    textarea {
+      min-height: 300px;
+      max-height: 500px;
+    }
+
+    .label-left {
+      label.control-label {
+        text-align: left;
+      }
+    }
+  }
+  .button-group {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: right;
+  }
+
+  .avatar {
+    height: 100px;
+    border:1px solid $color_gray;
+    width: 100%;
+    display: block;
+    background: $color_white;
+    content: "\f007";
+  }
+}
+
+//głowny panel edycji stron wpisów
+div {
+  position: relative;
+  .info-page {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 25px auto;
+    width: 100%;
+    height: 100px;
+    background: $color_green;
+    text-align: center;
+    cursor: pointer;
+    opacity: 0.8;
+    &, &:hover {
+      transition: 0.2s;
+    }
+    &:hover {
+      opacity: 1;
+    }
+     a{
+      text-align: center;
+      display: block;
+       width: 100%;
+
+    }
+    i, span {
+      color: $color_white;
+      font-size: $font-size * 1.5;
+      display: inline-block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    i {
+      font-weight: 100;
+      margin-right: 0px;
+    }
+    i + span {
+      margin-left: 5px;
+    }
+
+  }
+
+}
+
+.data-div {
+  height: 400px;
+  width: 100%;
+  overflow: auto;
+  position: relative;
+  font-size: $font-size * 0.9;
+  table {
+    position: relative;
+    thead {
+      position: relative;
+      top: 0;
+    }
+  }
+}

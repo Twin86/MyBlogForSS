@@ -1,0 +1,13 @@
+<?php
+/* moduł szybkiego logowania*/
+if ($_SESSION['uzytkownik'] == 'anonimowy') {
+    if ($_SESSION['is_ok'] == false) {
+        echo 'Błędne dane lub twoje konto jest zablokowane, spróbuj ponownie !';
+        $_SESSION['is_ok'] = true;
+    }
+
+    echo '<form autocomplete="off" class="form-inline " action="' . $_SERVER['REQUEST_URI'] . '" method="POST"><input type="hidden" name="log" value="logowanie"><div class="form-group"><label class="sr-only" for="login-name">Login</label><input  class="form-control" type="text" name="login-name" placeholder="Twój login"></div><div class="form-group"><label class="sr-only" for="haslo">Hasło</label><input class="form-control" type="password" name="haslo" placeholder="hasło"></div><button class="btn btn-default" type="submit" >Zaloguj</button> </form> <a href = "registration.php" title ="Przekieruj na stronę rejestracji"><i class="fa fa-user-plus" aria-hidden="true"></i></a>';
+} else {
+    echo '<p class="quick-login-area">Witaj ' . $_SESSION["uzytkownik"] . '</p><form action="' . $_SERVER['REQUEST_URI'] . '" method="POST"> <button class="btn btn-default"  name="wyloguj" type="submit" value ="logout" >Wyloguj</button></form>';
+}
+?>

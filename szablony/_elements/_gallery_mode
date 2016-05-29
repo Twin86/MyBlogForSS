@@ -1,0 +1,20 @@
+<?php
+$dir = "img/uploads";
+$list_dir = scandir($dir);
+$files = array();
+
+foreach ($list_dir as $string) {
+    if (strpos($string, "jpg")) {
+        $files [] = $string;
+    }
+}
+
+shuffle($files);
+
+for ($i = 0; $i < count($files) && $i < 9; $i++) {
+    if ($files[$i])
+        echo '<div class="col-md-4 col-sm-4 col-xs-12 img-gallery-block"><div><img src="' . $dir . '/' . $files[$i] . '"></div></div>';
+}
+?>
+
+
